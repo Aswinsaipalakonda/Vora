@@ -22,3 +22,14 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Deployment related exclusions (VPS setup)
+deploy.sh
+remote_deploy.sh
+fix_nginx.sh
+fix_admin_profile.py
+vora-backend-nginx.conf
+systemd/
+build.log
+build_utf8.log
+
