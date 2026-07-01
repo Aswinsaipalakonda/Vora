@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Invoice {{ invoice.invoice_number }}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 1cm;
+        }
+        body {
+            font-family: 'Helvetica', 'Arial', sans-serif;
+            font-size: 10pt;
+            color: #333;
+            line-height: 1.4;
+        }
+        .header {
+            border-bottom: 2px solid #f43f5e; /* Rose 500 */
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+        .salon-name {
+            font-size: 24pt;
+            font-weight: 800;
+            color: #111;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        .salon-info {
+            font-size: 9pt;
+            color: #666;
+            margin-top: 5px;
+        }
+        .invoice-title {
+            float: right;
+            text-align: right;
+        }
+        .invoice-title h1 {
+            font-size: 18pt;
+            margin: 0;
+            color: #f43f5e;
+            text-transform: uppercase;
+        }
+        .details {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        .details td {
+            vertical-align: top;
+            width: 50%;
+        }
+        .section-label {
+            font-size: 8pt;
+            font-weight: 800;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+        .customer-name {
+            font-size: 12pt;
+            font-weight: 800;
+            color: #111;
+        }
+        .item-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+        .item-table th {
+            background-color: #f9fafb;
+            border-bottom: 1px solid #eee;
+            padding: 12px 10px;
+            text-align: left;
+            font-size: 8pt;
+            font-weight: 800;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .item-table td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .item-name {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #111;
+        }
+        .item-desc {
+            font-size: 8pt;
+            color: #999;
+            margin-top: 2px;
+        }
+        .totals-section {
+            width: 40%;
+            float: right;
+        }
+        .total-row {
+            padding: 10px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .total-row.grand-total {
+            border-bottom: none;
+            padding-top: 15px;
+        }
+        .total-label {
+            font-size: 9pt;
+            font-weight: 800;
+            color: #666;
+            text-transform: uppercase;
+        }
+        .total-value {
+            float: right;
+            font-weight: 800;
+            font-size: 11pt;
+            color: #111;
+        }
+        .grand-total .total-label {
+            color: #111;
+            font-size: 12pt;
+        }
+        .grand-total .total-value {
+            color: #f43f5e;
+            font-size: 16pt;
+        }
+        .footer {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 8pt;
+            color: #999;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        .payment-status {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 9pt;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 10px;
+        }
+        .status-paid { background-color: #ecfdf5; color: #059669; }
+        .status-due { background-color: #fef2f2; color: #dc2626; }
+        .status-pending { background-color: #fffbeb; color: #d97706; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="invoice-title">
+            <h1>Invoice</h1>
+            <p style="margin: 5px 0 0 0; font-weight: 800; color: #111;">#{{ invoice.invoice_number }}</p>
+            <p style="margin: 0; font-size: 9pt; color: #666;">{{ invoice.date|date:"F d, Y" }}</p>
+            <div class="payment-status status-{{ invoice.status|lower }}">
+                {{ invoice.status }}
+            </div>
+        </div>
+        <h1 class="salon-name">{{ tenant.name }}</h1>
+        <div class="salon-info">
+            {{ tenant.address|linebreaksbr }}<br>
+            Phone: {{ tenant.phone }}
+        </div>
+    </div>
+
+    <table class="details">
+        <tr>
+            <td>
+                <div class="section-label">Bill To</div>
+                <div class="customer-name">{{ invoice.customer_name }}</div>
+                <div style="font-size: 9pt; color: #666; margin-top: 3px;">
+                    {{ invoice.customer_phone }}
+                </div>
+            </td>
+            <td style="text-align: right;">
+                <div class="section-label">Service Period</div>
+                <div style="font-size: 10pt; font-weight: 600; color: #111;">
+                    {{ invoice.service_start_time|date:"H:i" }} - {{ invoice.service_end_time|date:"H:i" }}
+                </div>
+            </td>
+        </tr>
+    </table>
+
+    <table class="item-table">
+        <thead>
+            <tr>
+                <th>Items & Services</th>
+                <th style="text-align: center; width: 100px;">Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.items.all %}
+            <tr>
+                <td>
+                    <div class="item-name">{{ item.name }}</div>
+                </td>
+                <td style="text-align: center; font-weight: 700;">₹{{ item.price|floatformat:2 }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div style="width: 100%; overflow: hidden;">
+        <div class="totals-section">
+            <div class="total-row">
+                <span class="total-label">Subtotal</span>
+                <span class="total-value">₹{{ invoice.subtotal|floatformat:2 }}</span>
+            </div>
+            {% if invoice.discount_amount %}
+            <div class="total-row">
+                <span class="total-label">Discount</span>
+                <span class="total-value">-₹{{ invoice.discount_amount|floatformat:2 }}</span>
+            </div>
+            {% endif %}
+            <div class="total-row grand-total">
+                <span class="total-label">Total Amount</span>
+                <span class="total-value">₹{{ invoice.total_amount|floatformat:2 }}</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        Thank you for your business!<br>
+        This is a computer generated invoice and does not require a physical signature.
+    </div>
+</body>
+</html>

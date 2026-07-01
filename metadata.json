@@ -1,0 +1,7 @@
+{
+  "name": "Lumière Salon Pro",
+  "description": "A high-end salon management platform featuring appointment booking, automated marketing, GST-compliant billing, and real-time inventory tracking with a premium dark and light aesthetic.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

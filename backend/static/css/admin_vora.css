@@ -1,0 +1,67 @@
+/* =========================================
+   Vora Premium Admin Theme (Django Unfold) - High Specificity
+   ========================================= */
+
+
+/* 2. SIDEBAR - NUCLEAR BLACK */
+/* Target specific sidebar containers used by Unfold */
+
+/* Sidebar Links */
+html body aside a,
+html body aside .group {
+    color: #9ca3af !important;
+    /* Gray-400 */
+}
+
+/* Sidebar Active State - Rose Highlight */
+html body aside a.bg-primary-100,
+html body aside a.text-primary-600,
+html body aside a[class*="bg-primary-100"] {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    background-image: none !important;
+    border-radius: 30px !important;
+}
+
+/* Rose Red Dot */
+html body aside a.bg-primary-100::after,
+html body aside a.text-primary-600::after {
+    content: '';
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 6px;
+    height: 6px;
+    background-color: #f43f5e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #f43f5e;
+}
+
+/* 3. FOCUS REMOVAL */
+html body *:focus,
+html body *:focus-visible,
+html body input:focus,
+html body select:focus,
+html body textarea:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border-color: #e5e7eb !important;
+    --tw-ring-shadow: none !important;
+    --tw-ring-color: transparent !important;
+}
+
+/* 4. PRIMARY BUTTONS */
+html body .bg-primary-600,
+html body button.bg-primary-600,
+html body input[type="submit"] {
+    background-color: #f43f5e !important;
+    border-radius: 30px !important;
+}
+
+html body .bg-primary-600:hover,
+html body input[type="submit"]:hover {
+    background-color: #e11d48 !important;
+    /* Rose 600 */
+    box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3) !important;
+}
